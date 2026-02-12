@@ -4,6 +4,7 @@ import { useBonosCorporativos } from "@/hooks/useBonosCorporativos";
 import { PanelCard } from "@/components/ui/PanelCard";
 import { AnimatedValue } from "@/components/ui/AnimatedValue";
 import { Skeleton } from "@/components/ui/Skeleton";
+import { financialConcepts } from "@/components/ui/InfoTooltip";
 
 export function BonosCorporativosPanel() {
   const { data, previousData, isLoading, error, lastUpdated } =
@@ -14,6 +15,8 @@ export function BonosCorporativosPanel() {
       title="Bonos Corporativos"
       lastUpdated={lastUpdated}
       error={error}
+      href="/bonos-corporativos"
+      infoTooltip={financialConcepts.bonoCorporativo}
     >
       {isLoading || !data ? (
         <Skeleton rows={5} />

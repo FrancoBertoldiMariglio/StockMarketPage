@@ -35,12 +35,16 @@ export interface MetalesCriptoData {
   crypto: CryptoQuote[];
 }
 
+export type ETFCategory = "paises" | "metales" | "cripto";
+
 export interface ETFQuote {
   ticker: string;
   name: string;
   country: string;
   countryFlag: string;
+  category: ETFCategory;
   price: number;
+  priceARS?: number; // Price in ARS when available
   variation: number;
   variationAbs: number;
   history: { date: string; close: number }[];

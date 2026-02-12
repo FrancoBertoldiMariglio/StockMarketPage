@@ -10,7 +10,12 @@ export function DolarPanel() {
   const { data, previousData, isLoading, error, lastUpdated } = useDolarData();
 
   return (
-    <PanelCard title="Tipos de D\u00f3lar" lastUpdated={lastUpdated} error={error}>
+    <PanelCard
+      title="Tipos de Dólar"
+      lastUpdated={lastUpdated}
+      error={error}
+      href="/dolares"
+    >
       {isLoading || !data ? (
         <Skeleton rows={7} />
       ) : (

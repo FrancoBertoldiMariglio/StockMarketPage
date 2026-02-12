@@ -5,6 +5,7 @@ import { PanelCard } from "@/components/ui/PanelCard";
 import { AnimatedValue } from "@/components/ui/AnimatedValue";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { formatCompactNumber } from "@/lib/formatters";
+import { financialConcepts } from "@/components/ui/InfoTooltip";
 
 const termLabels: Record<number, string> = {
   1: "1 d\u00eda",
@@ -16,7 +17,13 @@ export function CaucionPanel() {
   const { data, previousData, isLoading, error, lastUpdated } = useCaucionData();
 
   return (
-    <PanelCard title="Cauciones" lastUpdated={lastUpdated} error={error}>
+    <PanelCard
+      title="Cauciones"
+      lastUpdated={lastUpdated}
+      error={error}
+      href="/caucion"
+      infoTooltip={financialConcepts.caucion}
+    >
       {isLoading || !data ? (
         <Skeleton rows={3} />
       ) : (

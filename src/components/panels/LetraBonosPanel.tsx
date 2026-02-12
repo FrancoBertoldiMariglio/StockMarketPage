@@ -6,6 +6,7 @@ import { AnimatedValue } from "@/components/ui/AnimatedValue";
 import { VariationBadge } from "@/components/ui/VariationBadge";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { LetraBono } from "@/types/market";
+import { financialConcepts } from "@/components/ui/InfoTooltip";
 
 function TableHeader() {
   return (
@@ -75,7 +76,13 @@ export function LetraBonosPanel() {
     previousData?.find((p) => p.ticker === ticker);
 
   return (
-    <PanelCard title="Letras & Bonos Soberanos" lastUpdated={lastUpdated} error={error}>
+    <PanelCard
+      title="Letras & Bonos Soberanos"
+      lastUpdated={lastUpdated}
+      error={error}
+      href="/letras-bonos"
+      infoTooltip={financialConcepts.bono}
+    >
       {isLoading || !data ? (
         <Skeleton rows={6} />
       ) : (

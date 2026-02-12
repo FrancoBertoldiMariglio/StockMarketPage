@@ -6,12 +6,19 @@ import { AnimatedValue } from "@/components/ui/AnimatedValue";
 import { MiniChart } from "@/components/ui/MiniChart";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { cn } from "@/lib/utils";
+import { financialConcepts } from "@/components/ui/InfoTooltip";
 
 export function RiesgoPaisPanel() {
   const { data, previousData, isLoading, error, lastUpdated } = useRiesgoPais();
 
   return (
-    <PanelCard title="Riesgo Pa\u00eds" lastUpdated={lastUpdated} error={error}>
+    <PanelCard
+      title="Riesgo País"
+      lastUpdated={lastUpdated}
+      error={error}
+      href="/riesgo-pais"
+      infoTooltip={financialConcepts.riesgoPais}
+    >
       {isLoading || !data ? (
         <Skeleton rows={2} />
       ) : (

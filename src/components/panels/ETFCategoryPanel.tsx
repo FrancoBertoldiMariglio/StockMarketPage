@@ -1,0 +1,114 @@
+"use client";
+
+import { useState } from "react";
+import { PanelCard } from "@/components/ui/PanelCard";
+import { AnimatedValue } from "@/components/ui/AnimatedValue";
+import { VariationBadge } from "@/components/ui/VariationBadge";
+import { Skeleton } from "@/components/ui/Skeleton";
+import { ETFDetailChart } from "@/components/charts/ETFDetailChart";
+import { ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useCurrency } from "@/contexts/CurrencyContext";
+import { ETFQuote } from "@/types/market";
+import { financialConcepts } from "@/components/ui/InfoTooltip";
+
+interface ETFCategoryPanelProps {
+  title: string;
+  data: ETFQuote[] | null;
+  previousData?: ETFQuote[] | null;
+  isLoading: boolean;
+  error: Error | null;
+  lastUpdated: Date | null;
+  labelColumn?: string;
+  href?: string;
+}
+
+export function ETFCategoryPanel({
+  title,
+  data,
+  previousData,
+  isLoading,
+  error,
+  lastUpdated,
+  labelColumn = "País",
+  href,
+}: ETFCategoryPanelProps) {
+  const { currency } = useCurrency();
+  const [expandedTicker, setExpandedTicker] = useState<string | null>(null);
+
+  return (
+    <PanelCard
+      title={title}
+      lastUpdated={lastUpdated}
+      error={error}
+      href={href}
+      infoTooltip={financialConcepts.etf}
+    >
+      {isLoading || !data ? (
+        <Skeleton rows={6} />
+      ) : (
+        <div>
+          <div className="grid grid-cols-[auto_1fr_auto_auto] gap-x-3 text-xs text-text-secondary pb-1.5 mb-1 border-b border-border-primary">
+            <span className="font-medium">Ticker</span>
+            <span className="font-medium">{labelColumn}</span>
+            <span className="font-medium text-right">
+              Precio ({currency})
+            </span>
+            <span className="font-medium text-right">Var %</span>
+          </div>
+          {data.map((etf, i) => {
+            const prev = previousData?.[i];
+            const isExpanded = expandedTicker === etf.ticker;
+            const displayPrice =
+              currency === "ARS" ? (etf.priceARS ?? etf.price * 1050) : etf.price;
+            const prevDisplayPrice =
+              currency === "ARS"
+                ? (prev?.priceARS ?? (prev?.price ?? 0) * 1050)
+                : prev?.price;
+
+            return (
+              <div key={etf.ticker}>
+                <button
+                  onClick={() =>
+                    setExpandedTicker(isExpanded ? null : etf.ticker)
+                  }
+                  className="w-full grid grid-cols-[auto_1fr_auto_auto] gap-x-3 items-center py-1.5 border-b border-border-primary/30 hover:bg-bg-tertiary/50 transition-colors text-left"
+                >
+                  <span className="font-mono text-xs text-accent-cyan font-medium flex items-center gap-1">
+                    {etf.ticker}
+                    <ChevronDown
+                      className={cn(
+                        "w-3 h-3 text-text-muted transition-transform",
+                        isExpanded && "rotate-180"
+                      )}
+                    />
+                  </span>
+                  <span className="text-xs text-text-primary">
+                    {etf.countryFlag} {etf.country}
+                  </span>
+                  <span className="text-right">
+                    <AnimatedValue
+                      value={displayPrice}
+                      previousValue={prevDisplayPrice}
+                      format={currency === "ARS" ? "currency" : "currencyUSD"}
+                      className="text-xs"
+                    />
+                  </span>
+                  <span className="text-right">
+                    <VariationBadge
+                      value={etf.variation}
+                      className="text-[11px]"
+                    />
+                  </span>
+                </button>
+                {isExpanded && (
+                  <ETFDetailChart data={etf.history} ticker={etf.ticker} />
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </PanelCard>
+  );
+}

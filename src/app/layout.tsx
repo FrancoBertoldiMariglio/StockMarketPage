@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { CurrencyProvider } from "@/contexts/CurrencyContext";
 
 export const metadata: Metadata = {
-  title: "Panel Financiero \u2014 Mercado Argentino",
+  title: "Panel Financiero — Mercado Argentino",
   description:
-    "Dashboard informativo con datos del mercado financiero argentino: d\u00f3lar, bonos, ETFs, cauciones y m\u00e1s.",
+    "Dashboard informativo con datos del mercado financiero argentino: dólar, bonos, ETFs, cauciones y más.",
 };
 
 export default function RootLayout({
@@ -27,7 +28,7 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased">
-        {children}
+        <CurrencyProvider>{children}</CurrencyProvider>
       </body>
     </html>
   );
