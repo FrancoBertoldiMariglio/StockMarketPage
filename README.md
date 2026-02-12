@@ -1,36 +1,135 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Panel Financiero Argentina
 
-## Getting Started
+Dashboard informativo con datos del mercado financiero argentino en tiempo real.
 
-First, run the development server:
+## Funcionalidades
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### Seleccion de Moneda
+- Selecciona si tenes **Pesos (ARS)** o **Dolares (USD)** para invertir
+- Los precios se muestran en la moneda seleccionada
+- Podes cambiar la moneda en cualquier momento desde el header
+
+### Informacion General
+- **Tipos de Dolar**: Oficial, Blue, MEP, CCL, Tarjeta, Mayorista, Cripto
+- **Riesgo Pais**: Indicador EMBI+ con grafico historico
+
+### Instrumentos de Inversion
+
+#### ETFs
+- **ETFs Paises**: SPY (EEUU), EWZ (Brasil), FXI (China), EWW (Mexico), INDA (India), VEA (Desarrollados)
+- **ETFs Metales**: GLD (Oro), SLV (Plata), COPX (Cobre), PPLT (Platino)
+- **ETFs Criptomonedas**: BITO, ETHE, GBTC, ARKB
+
+#### Renta Fija
+- **Bonos Corporativos**: Obligaciones negociables de empresas argentinas
+- **Letras y Bonos Soberanos**: LECAPs, Bonares y Globales (Ley ARG y NY)
+- **Cauciones**: Tasas a 1, 7 y 30 dias
+
+### Caracteristicas Educativas
+- Tooltips informativos que explican conceptos financieros
+- Descripciones detalladas en cada pagina
+- Orientado a inversores principiantes y ahorristas
+
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **Lenguaje**: TypeScript
+- **Estilos**: Tailwind CSS 4
+- **Graficos**: Recharts
+- **Iconos**: Lucide React
+
+## Estructura del Proyecto
+
+```
+src/
+├── app/                    # Pages (App Router)
+│   ├── page.tsx           # Dashboard principal
+│   ├── dolares/           # Detalle tipos de dolar
+│   ├── riesgo-pais/       # Detalle riesgo pais
+│   ├── etf/
+│   │   ├── paises/        # ETFs de paises
+│   │   ├── metales/       # ETFs de metales
+│   │   └── cripto/        # ETFs de criptomonedas
+│   ├── bonos-corporativos/
+│   ├── letras-bonos/
+│   └── caucion/
+├── components/
+│   ├── layout/            # Header, Footer, DashboardGrid
+│   ├── panels/            # Paneles de cada instrumento
+│   ├── charts/            # Componentes de graficos
+│   └── ui/                # Componentes reutilizables
+├── contexts/              # React Context (Currency)
+├── hooks/                 # Custom hooks (usePolling, useETFData, etc.)
+├── services/              # Servicios de datos
+├── mocks/                 # Datos mock para desarrollo
+├── lib/                   # Utilidades y formatters
+└── types/                 # TypeScript types
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Instalacion
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Clonar el repositorio
+git clone https://github.com/FrancoBertoldiMariglio/StockMarketPage.git
+cd StockMarketPage
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Instalar dependencias
+npm install
 
-## Learn More
+# Iniciar servidor de desarrollo
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Abrir [http://localhost:3000](http://localhost:3000) en el navegador.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Scripts Disponibles
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run dev      # Servidor de desarrollo
+npm run build    # Build de produccion
+npm run start    # Iniciar servidor de produccion
+npm run lint     # Ejecutar ESLint
+```
 
-## Deploy on Vercel
+## Configuracion
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Variables de Entorno
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```env
+# Intervalo de polling en milisegundos (default: 1200000 = 20 minutos)
+NEXT_PUBLIC_POLLING_INTERVAL=1200000
+
+# Usar datos mock (default: true)
+NEXT_PUBLIC_USE_MOCK=true
+```
+
+## Roadmap
+
+### Version Actual (v2.0)
+- [x] Seleccion de moneda ARS/USD
+- [x] Navegacion reorganizada en 3 columnas
+- [x] ETFs divididos en categorias (Paises, Metales, Cripto)
+- [x] Paginas de detalle para cada instrumento
+- [x] Tooltips educativos
+- [x] Polling cada 20 minutos
+
+### Proximas Funcionalidades
+- [ ] Integracion con APIs reales de mercado
+- [ ] Graficos interactivos expandidos
+- [ ] Comparacion de activos (version premium)
+- [ ] Correlaciones entre instrumentos (version premium)
+- [ ] Proyecciones y alertas (version premium)
+
+## Modelo de Negocio
+
+**Freemium**:
+- Gratis: Dashboard basico con cotizaciones
+- Premium: Comparaciones, proyecciones, graficos avanzados
+
+## Licencia
+
+MIT
+
+## Autor
+
+Franco Bertoldi Mariglio
