@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
+import { SidebarProvider } from "@/contexts/SidebarContext";
+import { DashboardProvider } from "@/contexts/DashboardContext";
+import { MainLayout } from "@/components/layout/MainLayout";
 
 export const metadata: Metadata = {
   title: "Panel Financiero — Mercado Argentino",
@@ -28,7 +31,13 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased">
-        <CurrencyProvider>{children}</CurrencyProvider>
+        <CurrencyProvider>
+          <SidebarProvider>
+            <DashboardProvider>
+              <MainLayout>{children}</MainLayout>
+            </DashboardProvider>
+          </SidebarProvider>
+        </CurrencyProvider>
       </body>
     </html>
   );

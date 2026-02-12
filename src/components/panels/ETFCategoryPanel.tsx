@@ -21,6 +21,10 @@ interface ETFCategoryPanelProps {
   lastUpdated: Date | null;
   labelColumn?: string;
   href?: string;
+  // New props for detail page mode
+  mode?: "dashboard" | "detail";
+  selectedTicker?: string | null;
+  onSelectTicker?: (ticker: string) => void;
 }
 
 export function ETFCategoryPanel({
@@ -32,18 +36,25 @@ export function ETFCategoryPanel({
   lastUpdated,
   labelColumn = "País",
   href,
+  mode = "dashboard",
+  selectedTicker,
+  onSelectTicker,
 }: ETFCategoryPanelProps) {
   const { currency } = useCurrency();
   const [expandedTicker, setExpandedTicker] = useState<string | null>(null);
 
-  return (
-    <PanelCard
-      title={title}
-      lastUpdated={lastUpdated}
-      error={error}
-      href={href}
-      infoTooltip={financialConcepts.etf}
-    >
+  const isDashboard = mode === "dashboard";
+
+  const handleClick = (ticker: string) => {
+    if (isDashboard) {
+      setExpandedTicker(expandedTicker === ticker ? null : ticker);
+    } else if (onSelectTicker) {
+      onSelectTicker(ticker);
+    }
+  };
+
+  const content = (
+    <>
       {isLoading || !data ? (
         <Skeleton rows={6} />
       ) : (
@@ -58,7 +69,8 @@ export function ETFCategoryPanel({
           </div>
           {data.map((etf, i) => {
             const prev = previousData?.[i];
-            const isExpanded = expandedTicker === etf.ticker;
+            const isExpanded = isDashboard && expandedTicker === etf.ticker;
+            const isSelected = !isDashboard && selectedTicker === etf.ticker;
             const displayPrice =
               currency === "ARS" ? (etf.priceARS ?? etf.price * 1050) : etf.price;
             const prevDisplayPrice =
@@ -69,19 +81,22 @@ export function ETFCategoryPanel({
             return (
               <div key={etf.ticker}>
                 <button
-                  onClick={() =>
-                    setExpandedTicker(isExpanded ? null : etf.ticker)
-                  }
-                  className="w-full grid grid-cols-[auto_1fr_auto_auto] gap-x-3 items-center py-1.5 border-b border-border-primary/30 hover:bg-bg-tertiary/50 transition-colors text-left"
+                  onClick={() => handleClick(etf.ticker)}
+                  className={cn(
+                    "w-full grid grid-cols-[auto_1fr_auto_auto] gap-x-3 items-center py-1.5 border-b border-border-primary/30 hover:bg-bg-tertiary/50 transition-colors text-left",
+                    isSelected && "bg-accent-cyan/10 border-l-2 border-l-accent-cyan"
+                  )}
                 >
                   <span className="font-mono text-xs text-accent-cyan font-medium flex items-center gap-1">
                     {etf.ticker}
-                    <ChevronDown
-                      className={cn(
-                        "w-3 h-3 text-text-muted transition-transform",
-                        isExpanded && "rotate-180"
-                      )}
-                    />
+                    {isDashboard && (
+                      <ChevronDown
+                        className={cn(
+                          "w-3 h-3 text-text-muted transition-transform",
+                          isExpanded && "rotate-180"
+                        )}
+                      />
+                    )}
                   </span>
                   <span className="text-xs text-text-primary">
                     {etf.countryFlag} {etf.country}
@@ -101,7 +116,8 @@ export function ETFCategoryPanel({
                     />
                   </span>
                 </button>
-                {isExpanded && (
+                {/* Only show expandable chart in dashboard mode */}
+                {isDashboard && isExpanded && (
                   <ETFDetailChart data={etf.history} ticker={etf.ticker} />
                 )}
               </div>
@@ -109,6 +125,27 @@ export function ETFCategoryPanel({
           })}
         </div>
       )}
+    </>
+  );
+
+  // In detail mode, don't wrap in PanelCard
+  if (!isDashboard) {
+    return (
+      <div className="bg-bg-secondary rounded-lg border border-border-primary p-4">
+        {content}
+      </div>
+    );
+  }
+
+  return (
+    <PanelCard
+      title={title}
+      lastUpdated={lastUpdated}
+      error={error}
+      href={href}
+      infoTooltip={financialConcepts.etf}
+    >
+      {content}
     </PanelCard>
   );
 }

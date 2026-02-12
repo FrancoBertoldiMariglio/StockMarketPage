@@ -13,7 +13,6 @@ export type Currency = "ARS" | "USD";
 interface CurrencyContextType {
   currency: Currency;
   setCurrency: (currency: Currency) => void;
-  hasSelectedCurrency: boolean;
 }
 
 const CurrencyContext = createContext<CurrencyContextType | undefined>(
@@ -21,28 +20,26 @@ const CurrencyContext = createContext<CurrencyContextType | undefined>(
 );
 
 const STORAGE_KEY = "preferred_currency";
+const DEFAULT_CURRENCY: Currency = "USD";
 
 interface CurrencyProviderProps {
   children: ReactNode;
 }
 
 export function CurrencyProvider({ children }: CurrencyProviderProps) {
-  const [currency, setCurrencyState] = useState<Currency>("ARS");
-  const [hasSelectedCurrency, setHasSelectedCurrency] = useState(false);
+  const [currency, setCurrencyState] = useState<Currency>(DEFAULT_CURRENCY);
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored === "ARS" || stored === "USD") {
       setCurrencyState(stored);
-      setHasSelectedCurrency(true);
     }
     setIsHydrated(true);
   }, []);
 
   const setCurrency = (newCurrency: Currency) => {
     setCurrencyState(newCurrency);
-    setHasSelectedCurrency(true);
     localStorage.setItem(STORAGE_KEY, newCurrency);
   };
 
@@ -51,9 +48,7 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
   }
 
   return (
-    <CurrencyContext.Provider
-      value={{ currency, setCurrency, hasSelectedCurrency }}
-    >
+    <CurrencyContext.Provider value={{ currency, setCurrency }}>
       {children}
     </CurrencyContext.Provider>
   );

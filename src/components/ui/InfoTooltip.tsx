@@ -115,4 +115,9 @@ export const financialConcepts = {
     content:
       "Es una medida de sensibilidad del precio del bono ante cambios en las tasas de interés. A mayor duration, más volátil es el precio del bono frente a movimientos de tasa.",
   },
+  brechaBlue: {
+    title: "¿Qué es la Brecha Blue?",
+    content:
+      "Es la diferencia porcentual entre el dólar blue y el oficial. Indica la presión cambiaria y la demanda de dólares en el mercado paralelo. A mayor brecha, mayor es la desconfianza en el tipo de cambio oficial.",
+  },
 };
