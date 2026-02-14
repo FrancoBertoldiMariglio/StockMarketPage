@@ -1,10 +1,18 @@
 "use client";
 
-import { TrendingUp, Activity, Clock, BarChart3 } from "lucide-react";
+import { Activity, Clock, BarChart3, TrendingUp } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { CurrencyToggle } from "@/components/ui/CurrencyToggle";
 import { MobileMenuButton } from "./Sidebar";
+import { Logo } from "@/components/ui/Logo";
+
+// TODO: Reemplazar con valores reales de configuración
+const INFO_DATOS = {
+  matricula: "12345",
+  direccion: "Av. Corrientes 1234, CABA",
+  legajo: "A-001",
+};
 
 function EspecificacionesContent() {
   return (
@@ -65,21 +73,34 @@ export function Header() {
           {/* Mobile menu button */}
           <MobileMenuButton />
 
-          {/* Logo */}
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-accent-cyan/10 border border-accent-cyan/30 flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-accent-cyan" />
-            </div>
-            <div>
-              <h1 className="font-semibold text-text-primary text-sm leading-tight">
-                Panel Financiero
-              </h1>
-              <span className="text-[11px] text-text-muted">Argentina</span>
-            </div>
-          </div>
+          {/* Panel Financiero (sin icono) */}
+          <Logo size="md" showIcon={false} showText={true} text="Panel Financiero" />
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
+          {/* Logo + Info datos: Matrícula, Dirección, Legajo */}
+          <div className="hidden md:flex items-center gap-4 text-[11px] text-text-secondary">
+            <span className="text-text-primary font-medium">Logo</span>
+            <div className="flex items-center gap-1.5">
+              <span className="text-text-muted">Matrícula:</span>
+              <span className="text-text-primary font-medium">
+                {INFO_DATOS.matricula}
+              </span>
+            </div>
+            <div className="hidden lg:flex items-center gap-1.5">
+              <span className="text-text-muted">Dirección:</span>
+              <span className="text-text-primary font-medium max-w-[200px] truncate">
+                {INFO_DATOS.direccion}
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="text-text-muted">Legajo:</span>
+              <span className="text-text-primary font-medium">
+                {INFO_DATOS.legajo}
+              </span>
+            </div>
+          </div>
+
           <CurrencyToggle />
           <button
             onClick={() => setShowSpecs((v) => !v)}

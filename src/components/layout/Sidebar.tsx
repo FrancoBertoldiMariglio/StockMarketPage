@@ -18,6 +18,7 @@ import {
 import { useSidebar } from "@/contexts/SidebarContext";
 import { SidebarItem, SidebarItemData } from "./SidebarItem";
 import { cn } from "@/lib/utils";
+import { Logo } from "@/components/ui/Logo";
 
 const sidebarItems: SidebarItemData[] = [
   {
@@ -86,16 +87,7 @@ export function Sidebar() {
       >
         {/* Header */}
         <div className="h-14 flex items-center justify-between px-4 border-b border-border-primary">
-          {isOpen && (
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-accent-cyan/10 border border-accent-cyan/30 flex items-center justify-center">
-                <TrendingUp className="w-4 h-4 text-accent-cyan" />
-              </div>
-              <span className="font-semibold text-text-primary text-sm">
-                Panel Financiero
-              </span>
-            </div>
-          )}
+          {isOpen && <Logo size="sm" showText={true} />}
 
           {/* Desktop toggle */}
           <button
